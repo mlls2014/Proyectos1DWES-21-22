@@ -1,6 +1,6 @@
 <?php 
 // $pfichero= fopen('http://192.168.250.254/archivo.txt','r');
-$pfichero= fopen('../archivo.txt','r');
+$pfichero= fopen('./archivo.txt','r');
 
 if(!$pfichero){
    echo'No se pudo abrir archivo.txt :( '; 
