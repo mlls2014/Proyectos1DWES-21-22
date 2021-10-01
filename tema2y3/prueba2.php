@@ -1,1 +1,4 @@
-<?php phpinfo();
+<?php
+
+$ahora= time();
+print($ahora);
