@@ -31,14 +31,15 @@
       //$apellidos=filtrado(($_POST["apellidos"]));
       //Podemos usar filter_var
       $apellidos=filter_var(($_POST["apellidos"]),FILTER_SANITIZE_STRING);
-      if (!empty($apellidos) && strlen($apellidos)<15 && (!preg_match("/[0-9]/", $_POST["apellidos"]))) {
+      if (!empty($apellidos) && strlen($apellidos)<15 && (!preg_match("/[0-9]/", $apellidos))) {
          echo "Los apellidos introducidos son " . $apellidos .'<br/>';
       } else {
          echo  "Los apellidos son vacíos o tienen más de 15 caracteres o tienen algún número:(" .'<br/>';
       }
 
       //Selección obligatoria de algo
-      echo "Su interés es :" . $_POST["interes"] .'<br/>';
+      $interes=filtrado(($_POST["interes"]));
+      echo "Su interés es :" . $interes .'<br/>';
       
    }
 
@@ -46,7 +47,8 @@
    <h1>Datos personales</h1>
    <!-- Si el formulario es autoprocesado podemos usar $_SERVER['PHP_SELF'] -->
    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-      <p><label>Escriba su nombre: <input type="text" name="nombre" size="20" maxlength="15" <?php echo "value='" . @$nombre . "'"; ?>></label></p>      
+      <p><label>Escriba su nombre: 
+      <input type="text" name="nombre" size="20" maxlength="15" <?php echo "value='" . @$nombre . "'"; ?>></label></p>      
       <p><label>Escriba sus apellidos: <input type="text" name="apellidos" size="40" maxlength="20" <?php if(isset($apellidos)){echo "value='$apellidos'";} ?>></label></p>
       <p>
       Indique si cuál es su interés preferido:

@@ -70,7 +70,11 @@
    ?>
    <h1>Datos personales</h1>
    <?php echo validez($errors); ?>
-   <?php if (isset($_POST["submit"]) && (count($errors) == 0)) { valoresfrm(); } ?>
+   <?php if (isset($_POST["submit"]) && (count($errors) == 0)) 
+   { 
+      valoresfrm(); 
+   } 
+   ?>
    <!-- Si el formulario es autoprocesado podemos usar $_SERVER['PHP_SELF'] -->
    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
       <p><label>Escriba su nombre: <input type="text" name="nombre" size="20" maxlength="15" <?php echo "value='" . @$nombre . "'"; ?>></label></p>  

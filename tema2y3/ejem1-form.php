@@ -39,7 +39,7 @@
       <p><label>Escriba sus apellidos: <input type="text" name="apellidos" size="40" maxlength="20"></label></p>
       <p>
       Indique si cuál es su interés preferido:
-      <select name="interes">
+      <select name="interes" >
         <option value="0">Natación</option>
         <option value="1">Tenis</option>
         <option value="2">Fútbol</option>
