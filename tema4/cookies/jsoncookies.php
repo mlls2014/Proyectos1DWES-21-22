@@ -6,10 +6,10 @@ Estas funciones se utilizan en muchos otros tipos de problemas
 */
 if (!isset($_COOKIE['cards'])) {
    //Establecemos la cookie
-   $cardArray = array(
-      'CARD 1' => array('FRONT I', 'BACK I'),
-      'CARD 2' => array('FRONT 2', 'BACK 2')
-   );
+   $cardArray = [
+      'CARD 1' => ['FRONT I', 'BACK I'],
+      'CARD 2' => ['FRONT 2', 'BACK 2']
+   ];
 
    //Convierto el array en una cadena json
    $json = json_encode($cardArray);

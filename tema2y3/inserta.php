@@ -9,7 +9,6 @@
    if (is_uploaded_file($_FILES['imagen']['tmp_name'])) {
       $nombreDirectorio = "img/";
       $nombreFichero = $_FILES['imagen']['name'];
-      $nombreCompleto = $nombreDirectorio . $nombreFichero;
       if (is_dir($nombreDirectorio)) { // es un directorio existente
          $idUnico = time();
          $nombreFichero = $idUnico . "-" .  $nombreFichero;
