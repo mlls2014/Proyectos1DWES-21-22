@@ -1,4 +1,8 @@
 <?php
+/*
+Página de inicio a nuestro portal, una vez hemos logueado correctamente. Esto lo comprobamos 
+con isset($_SESSION['logueado'])
+*/
   session_start();   //Activamos el uso de sesiones
   if((!isset($_SESSION['logueado']))&& (!isset($_COOKIE['abierta'])))  // Si no existe la sesión…
     { //Redirigimos a la página de login con el tipo de error ‘fuera’: que indica que

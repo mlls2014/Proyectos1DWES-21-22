@@ -1,4 +1,7 @@
 <?php
+/*
+Página de login a la aplicación de login. Es la que se debe utilizar como punto de entrada a nuestro portal
+*/
   $usuariook = "pepe";
   $passok = "123";
   if(isset($_POST['submit']))
@@ -27,7 +30,7 @@
              // Lógica asociada a mantener la sesión abierta 
              if(isset($_POST['abierta'])&&($_POST['abierta']=="on")) // Si está seleccionado el checkbox...
              { // Creamos una cookie para la sesión 
-               setcookie ('abierta' ,$_POST['usuario'],time() + (15 * 24 * 60 * 60)); 
+               setcookie ('abierta' ,$_POST['usuario'],time() + (15 * 24 * 60 * 60),"/"); 
               } else {  //Si no está seleccionado el checkbox..
                 // Eliminamos la cookie
                 if(isset($_COOKIE['abierta'])) { 

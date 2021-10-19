@@ -21,14 +21,14 @@
       <br/>     
 
       <?php
-      //   if(isset($_GET['error'])){
-      //      if ($_GET['error'] == "datos") {
-      //          echo '<div class="alert alert-danger" style="margin-top:5px;">' . "Tu usuario o/y tu contraseña no son correctos, inténtelo de nuevo!! :( <br/>" . '</div>';
-      //        }
-      //     elseif ($_GET['error'] == "fuera") {
-      //          echo '<div class="alert alert-danger" style="margin-top:5px;">' . "No puede acceder  directamente en esta página, ha de loguearse!! :O <br/>" . '</div>';          
-      //        }
-      //   }     
+        if(isset($_GET['error'])){
+           if ($_GET['error'] == "datos") {
+               echo '<div class="alert alert-danger" style="margin-top:5px;">' . "Tu usuario o/y tu contraseña no son correctos, inténtelo de nuevo!! :( <br/>" . '</div>';
+             }
+          elseif ($_GET['error'] == "fuera") {
+               echo '<div class="alert alert-danger" style="margin-top:5px;">' . "No puede acceder  directamente en esta página, ha de loguearse!! :O <br/>" . '</div>';          
+             }
+        }     
       ?>      
       <input type="submit" value="Enviar" name="submit" class="btn btn-success" />
     </form>
