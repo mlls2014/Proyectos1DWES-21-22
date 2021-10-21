@@ -6,7 +6,7 @@ class Gato extends Animal {
   
   private $raza;
   
-  public function __construct($s, $r) {
+  public function __construct($s="", $r="") {
     parent::__construct($s);
     if (isset($r)) {
       $this->raza = $r;

@@ -5,33 +5,33 @@
       <div class="row form-group">
          <div class="col col-md-5">
             <label for="nombre">Escriba su nombre: </label>
-            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Entre su nombre" <?php echo "value='" . @$nombre . "'"; ?> required>
+            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Entre su nombre" <?php echo "value='" . @$nombre . "'"; ?> >
             <?php echo mostrar_error($errors, "nombre"); ?>
          </div>
 
          <div class="col col-md-7">
             <label for="apellidos">Escriba sus apellidos: </label>
             <input type="text" class="form-control" name="apellidos" id="apellidos" placeholder="Entre sus apellidos"
-            <?php if(isset($apellidos)){echo "value='$apellidos'";} ?> required>
+            <?php if(isset($apellidos)){echo "value='$apellidos'";} ?> >
             <?php echo mostrar_error($errors, "apellidos"); ?>
          </div>
       </div>
       <div class="row form-group">
          <div class="col">
             <label for="biografia">Biografia:</label>
-            <textarea class="form-control" id="biografia" name="biografia" placeholder="Cuéntenos su historia..." rows="3" required><?php echo @$biografia; ?></textarea>
+            <textarea class="form-control" id="biografia" name="biografia" placeholder="Cuéntenos su historia..." rows="3" ><?php echo @$biografia; ?></textarea>
          </div>
       </div>
       <div class="row form-group">
          <div class="col col-md-7">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Entre su email" <?php echo "value='" . @$email . "'"; ?> required>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Entre su email" <?php echo "value='" . @$email . "'"; ?> >
             <?php echo mostrar_error($errors, "email"); ?>
          </div>
 
          <div class="col col-md-5">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Entre su password" <?php echo "value='" . @$password . "'"; ?> required>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Entre su password" <?php echo "value='" . @$password . "'"; ?> >
             <?php echo mostrar_error($errors, "password"); ?>
          </div>
       </div>

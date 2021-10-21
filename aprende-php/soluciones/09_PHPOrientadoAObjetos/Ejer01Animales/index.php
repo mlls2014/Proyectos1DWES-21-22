@@ -13,9 +13,9 @@
     include_once 'Lagarto.php';
 
     $garfield = new Gato("macho", "romano");
-    $tom = new Gato("macho");
-    $lisa = new Gato("hembra");
-    $silvestre = new Gato();
+    $tom = new Gato("macho", "romano");
+    $lisa = new Gato("hembra", "romano");
+    $silvestre = new Gato("macho", "romano");
 
     echo $garfield."<br>";
     echo $tom."<br>";

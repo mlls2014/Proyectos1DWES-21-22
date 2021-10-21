@@ -10,7 +10,7 @@ class Coche
    /* un método publico ya que no especificamos visibilidad */
    function precio_final()
    {
-      return (int)($this->precio) * (1 + $this->tipo_iva / 100);
+      return (int)((int)($this->precio) * (1 + $this->tipo_iva / 100));
    }
    /* un método privado al que solo podremos acceder desde la propia clase*/
    private function precio_amigo($descuento = 15)
