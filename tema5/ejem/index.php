@@ -33,7 +33,7 @@ abstract class Main
       $impresora->imprimir(new Curriculum());
       echo "<br>";
       $impresora->imprimir(new Informe());
-      $impresora->imprimir("asjo");
+      // $impresora->imprimir("asjo");
    }
 }
 
