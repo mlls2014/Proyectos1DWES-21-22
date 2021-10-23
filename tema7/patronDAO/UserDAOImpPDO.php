@@ -1,4 +1,9 @@
 <?php
+/*
+* Implementación en PDO de la interfaz UserDAO
+* Si en algún momento tuvieramos que utilizar otro gestor de BD como Postgress u Oracle
+* bastaría con añadir una clase UserDAOImpOracle sin necesidad de cambiar las otras capas de la app
+*/
 
 require_once("UserDAO.php");
 require_once("BaseDAOImpPDO.php");
@@ -29,12 +34,16 @@ class UserDAOImpPDO extends BaseDAOImpPDO implements UserDAO
 
    public function update(User $user)
    {
-      $sql = "UPDATE " . $this->table . " SET nombre = ?, email = ?, password = ?, image = ?";
-      try {
-         $stmt = $this->db->prepare($sql);
-         $stmt->execute(array($user->getNombre(), $user->getEmail(), $user->getPassword(), $user->getImage()));
-      } catch (\PDOException $e) {
-         echo "Error al modificar Usuario!: " . $e->getMessage() . "</br>";
+      if (!empty($user->getId())){
+         $sql = "UPDATE " . $this->table . " SET nombre = ?, email = ?, password = ?, image = ? WHERE id = ?";
+         try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(array($user->getNombre(), $user->getEmail(), $user->getPassword(), $user->getImage(), $user->getId()));
+         } catch (\PDOException $e) {
+            echo "Error al modificar Usuario!: " . $e->getMessage() . "</br>";
+         }
+      }else{
+            echo "Error al modificar Usuario!: No existe id</br>";
       }
    }
 }

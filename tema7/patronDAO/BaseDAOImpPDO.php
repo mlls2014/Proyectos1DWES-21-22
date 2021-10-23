@@ -1,5 +1,9 @@
 <?php
-
+/*
+* Implementación en PDO de la interfaz BaseDAO
+* Si en algún momento tuvieramos que utilizar otro gestor de BD como Postgress u Oracle
+* bastaría con añadir una clase BaseDAOImpOracle sin necesidad de cambiar las otras capas de la app
+*/
 require_once("DBManager.php");
 
 /**
@@ -20,7 +24,8 @@ abstract class BaseDAOImpPDO
     * La alternativa sería devolver un objeto del tipo stdClass o un array lo que me obligaría a copiar manualmente las
     * columnas a las propiedades del objeto de la clase que quisiera. Esto no podría hacerlo en BaseDAOImpPDO de forma sencilla
     * y lo tendría que hacer en cada XXXDAOImp.
-    * Otra alternativa sería trabajar en las respuestas de BD sólo con arrays de stdClass
+    * Otra alternativa sería trabajar en las respuestas de BD sólo con arrays de stdClass, lo que no independiza tampoco la BD
+    * de las capas superiores de la app
    */
    protected $clase; 
    protected $db;
@@ -106,8 +111,4 @@ abstract class BaseDAOImpPDO
       }
    }
 
-   public function setLog($user_id, $action, $description)
-   {
-      $this->db->query("CALL log($user_id, '$action', '$description')");
-   }
 }
