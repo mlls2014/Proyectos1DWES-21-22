@@ -17,4 +17,13 @@ class HomeController extends BaseController
       ];
       $this->view->show("inicio", $parametros);
    }
+
+   public function logout()
+   {
+      session_start();
+      session_unset();
+      session_destroy();
+      $this->redirect("index","index");
+   }
+
 }

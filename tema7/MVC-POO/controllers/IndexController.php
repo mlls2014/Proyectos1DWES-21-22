@@ -1,6 +1,6 @@
 <?php
 /**
- * Controlador de la página index desde la que se puede hacer el login y el registro
+ * Controlador de la página abierta de inicio del sitio, desde la que se puede hacer el login y el registro
  */
 
  /**
@@ -18,24 +18,63 @@ class IndexController extends BaseController
 
    public function index()
    {
-      $parametros = [
-         "tituloventana" => "Login a la aplicación"
-      ];
-      $this->view->show("Login",$parametros);
+      $this->view->show("InicioGuest");
    }
 
    /**
-    * Podemos implementar la acción login
+    * Muestra la vista de login
     *
     * @return void
     */
    public function login()
    {
-     
+      $parametros = [
+         "mensajes" => []
+      ];
+      $this->view->show("Login", $parametros);
    }
 
    /**
-    * Podemos implementar la acción registro de usuarios
+    * Maneja la solicitud de petición de login
+    * Recibo de POST los datos de login y usuario
+    *
+    * @return void
+    */
+    public function autenticate()
+    {
+      if(isset($_POST['submit'])){
+         // Pulso el botón Entrar del login
+         $login = filter_var($_POST['login'],FILTER_SANITIZE_STRING);
+         $password = filter_var($_POST['password'],FILTER_SANITIZE_STRING);
+         if($login=="admin" && $password=="admin"){   //Sustituir por comprobación en BD
+            // Comienzo sesión y guardo los datos del usuario autenticado
+            session_start();
+            $_SESSION['login'] = $login;
+            $parametros = [
+               "tituloventana" => "Gestión de usuarios",
+               "mensajes" => []
+            ];
+            // Salto a la página inicial de mi portal
+            $this->redirect("home","index");
+            // $this->view->show("Inicio", $parametros);
+         }else { // Autenticación no correcta
+            $parametros = [
+               "tituloventana" => "Gestión de usuarios",
+               "mensajes" => [[
+                              "tipo" => "danger",
+                              "mensaje" => "¡El usuario o la contraseña no son correctos!"]
+                           ]
+            ];
+            $this->view->show("Login", $parametros);
+         }
+      }else{
+         // Caso raro de que entre con la url ?controller=index&action=autenticate
+         $this->redirect("index","login");
+      } 
+    }
+
+   /**
+    * Muestra la vista de registro
     *
     * @return void
     */
