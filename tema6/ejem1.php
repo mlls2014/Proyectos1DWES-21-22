@@ -11,7 +11,7 @@ try {
 
 $edad=29;
 // Datos FETCH_ASSOC 
-$stmt = $db->prepare("SELECT * FROM clientes WHER edad > :edad");
+$stmt = $db->prepare("SELECT * FROM clientes WHERE edad > :edad");
 // Especificamos el fetch mode antes de llamar a fetch() 
 // $stmt->setFetchMode(PDO::FETCH_ASSOC);
 $stmt->bindParam(":edad", $edad);
