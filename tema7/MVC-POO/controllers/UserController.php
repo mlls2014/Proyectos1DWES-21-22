@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Incluimos los modelos que necesite este controlador
+ * Incluimos los DAOs que necesite este controlador
  */
-require_once MODELS_FOLDER . 'UserModel.php';
+require_once MODELS_FOLDER . 'UserDAOImpPDO.php';
 
 /**
  * Clase controlador que será la encargada de obtener, para cada tarea, los datos
@@ -12,9 +12,8 @@ require_once MODELS_FOLDER . 'UserModel.php';
  */
 class UserController extends BaseController
 {
-   // El atributo $modelo es de la 'clase modelo' y será a través del que podremos 
-   // acceder a los datos y las operaciones de la base de datos desde el controlador
-   private $modelo;
+   // El atributo $dao será a través del que podremos acceder a los datos 
+   private $daoUser;
    //$mensajes se utiliza para almacenar los mensajes generados en las tareas, 
    //que serán posteriormente transmitidos a la vista para su visualización
    private $mensajes;
@@ -26,7 +25,12 @@ class UserController extends BaseController
    public function __construct()
    {
       parent::__construct();
-      $this->modelo = new UserModel();
+      session_start();   // Todos los métodos de este controlador requieren autenticación
+      if ((!isset($_SESSION['login'])))  // Si no existe la sesión…
+      { 
+         $this->redirect("index", "login");
+      }
+      $this->daoUser = new UserDAOImpPDO();
       $this->mensajes = [];
    }
 
@@ -38,12 +42,11 @@ class UserController extends BaseController
    {
       // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
       $parametros = [
-         "tituloventana" => "Base de Datos con PHP y PDO",
          "datos" => NULL,
          "mensajes" => []
       ];
       // Realizamos la consulta y almacenamos los resultados en la variable $resultModelo
-      $resultModelo = $this->modelo->listado();
+      $resultModelo = $this->daoUser->getAll();
       // Si la consulta se realizó correctamente transferimos los datos obtenidos
       // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
       // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos

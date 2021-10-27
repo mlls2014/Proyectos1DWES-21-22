@@ -1,42 +1,44 @@
-<?php require_once 'includes/head.php'; ?>
+<?php require 'includes/head.php'; ?>
+<?php require 'includes/navauth.php'; ?>
 
-<div class="container centrar">
-  <a href="?controller=home&action=index">Inicio</a>
-  <div class="container cuerpo text-center centrar">
-    <p>
-    <h2><img class="alineadoTextoImagen" src="images/user.png" width="50px" />Listar Usuarios</h2>
-    </p>
-  </div>
-  <!--Mostramos los mensajes que se hayan generado al realizar el listado-->
-  <?php foreach ($mensajes as $mensaje) : ?>
-    <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
-  <?php endforeach; ?>
-  <!--Creamos la tabla que utilizaremos para el listado:-->
-  <table class="table table-striped">
-    <tr>
-      <th>Nombre</th>
-      <!-- <th>Contraseña</th>-->
-      <th>Email</th>
-      <th>Foto</th>
-      <!-- Añadimos una columna para las operaciones que podremos realizar con cada registro -->
-      <th>Operaciones</th>
-    </tr>
-    <!--Los datos a listar están almacenados en $parametros["datos"], que lo recibimos del controlador-->
-    <?php foreach ($datos as $d) : ?>
-      <!--Mostramos cada registro en una fila de la tabla-->
-      <tr>
-        <td><?= $d["nombre"] ?></td>
-        <!--<td><?= $d["password"] ?></td>-->
-        <td><?= $d["email"] ?></td>
-        <?php if ($d["imagen"] !== NULL) : ?>
-          <td><img src="fotos/<?= $d['imagen'] ?>" width="40" /></td>
-        <?php else : ?>
-          <td>----</td>
-        <?php endif; ?>
-        <!-- Enviamos a actuser.php, mediante GET, el id del registro que deseamos editar o eliminar: -->
-        <td><a href="?controller=user&action=actuser&id=<?= $d['id'] ?>">Editar </a><a href="?controller=user&action=deluser&id=<?= $d['id'] ?>">Eliminar</a></td>
-      </tr>
-    <?php endforeach; ?>
-  </table>
-</div>
+<section class="page-section pt-5">
+   <div class="container">
+      <h2 class="text-center text-uppercase text-secondary mb-2">Listado de Usuarios</h2>
+      <!--Mostramos los mensajes que se hayan generado al realizar el listado-->
+      <?php foreach ($mensajes as $mensaje) : ?>
+         <div class="alert alert-<?= $mensaje["tipo"] ?> alert-dismissible fade show" role="alert">
+            <?= $mensaje["mensaje"] ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>
+      <?php endforeach; ?>
+      <!--Creamos la tabla que utilizaremos para el listado:-->
+      <table class="table table-striped text-center">
+         <tr>
+            <th>Nombre</th>
+            <!-- <th>Contraseña</th>-->
+            <th>Email</th>
+            <th>Foto</th>
+            <!-- Añadimos una columna para las operaciones que podremos realizar con cada registro -->
+            <th>Operaciones</th>
+         </tr>
+         <!--Los datos a listar están almacenados en $parametros["datos"], que lo recibimos del controlador-->
+         <?php foreach ($datos as $user) : ?>
+            <!--Mostramos cada registro en una fila de la tabla-->
+            <tr>
+               <td><?= $user->getNombre() ?></td>
+               <td><?= $user->getEmail() ?></td>
+               <?php if ($user->getImage() !== NULL) : ?>
+                  <td><img src="fotos/<?= $user->getImage() ?>" width="40" /></td>
+               <?php else : ?>
+                  <td>----</td>
+               <?php endif; ?>
+               <!-- Enviamos a actuser.php, mediante GET, el id del registro que deseamos editar o eliminar: -->
+               <td><a href="?controller=user&action=actuser&id=<?= $user->getId() ?>">Editar </a><a href="?controller=user&action=deluser&id=<?= $user->getId() ?>">Eliminar</a></td>
+            </tr>
+         <?php endforeach; ?>
+      </table>
+
+   </div>
+</section>
+
 <?php require 'includes/footer.php'; ?>

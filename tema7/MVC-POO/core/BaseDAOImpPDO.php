@@ -40,20 +40,27 @@ abstract class BaseDAOImpPDO
 
    /**
     * Método genérico para obtener todos los registros de la tabla $table
+    * Devuelve un array asociativo con tres campos:
+    * -'correcto': indica si el listado se realizó correctamente o no.
+    * -'datos': almacena todos los datos obtenidos de la consulta.
+    * -'error': almacena el mensaje asociado a una situación errónea (excepción) 
     *
     */
    public function getAll(): array
    {
-      $resultSet = [];
+      $return = ["correcto" => false, "datos" => NULL, "error" => NULL];
       try {
          $query = $this->db->query("SELECT * FROM $this->table ORDER BY id DESC");
          //Devolvemos el resultset en forma de array de objetos
          //PDO::FETCH_PROPS_LATE sirve para que se llame al constructor de la clase antes de asignar los valores de la fila al objeto
          $resultSet = $query->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->clase);
+         $return["correcto"] = true;
+         $return["datos"] = $resultSet;
       } catch (\PDOException $e) {
-         echo "Error al obtener todas las filas en " . $this->table . "!: " . $e->getMessage() . "</br>";
+         $return["correcto"] = false;
+         $return["error"] = "Error al obtener todas las filas en " . $this->table . "!: " . $e->getMessage() . "</br>";
       } finally {
-         return $resultSet;
+         return $return;
       }
    }
 

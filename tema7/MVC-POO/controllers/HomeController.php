@@ -8,6 +8,11 @@ class HomeController extends BaseController
    public function __construct()
    {
       parent::__construct();
+      session_start();   // Todos los métodos de este controlador requieren autenticación
+      if ((!isset($_SESSION['login'])))  // Si no existe la sesión…
+      { 
+         $this->redirect("index", "login");
+      }
    }
 
    public function index()
@@ -23,7 +28,6 @@ class HomeController extends BaseController
       session_start();
       session_unset();
       session_destroy();
-      $this->redirect("index","index");
+      $this->redirect("index", "index");
    }
-
 }

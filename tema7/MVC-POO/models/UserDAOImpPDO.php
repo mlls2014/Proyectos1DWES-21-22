@@ -6,7 +6,7 @@
 */
 
 require_once("UserDAO.php");
-require_once("User.php");
+// require_once("User.php");
 
 class UserDAOImpPDO extends BaseDAOImpPDO implements UserDAO
 {

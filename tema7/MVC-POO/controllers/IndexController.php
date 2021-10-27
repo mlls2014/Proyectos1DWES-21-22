@@ -1,6 +1,7 @@
 <?php
 /**
  * Controlador de la página abierta de inicio del sitio, desde la que se puede hacer el login y el registro
+ * y otros métodos que no requieran estar autenticado
  */
 
  /**
@@ -16,6 +17,11 @@ class IndexController extends BaseController
       parent::__construct();
    }
 
+   /**
+    * Muestra la página del sitio no autenticada
+    *
+    * @return void
+    */
    public function index()
    {
       $this->view->show("InicioGuest");
@@ -46,7 +52,7 @@ class IndexController extends BaseController
          // Pulso el botón Entrar del login
          $login = filter_var($_POST['login'],FILTER_SANITIZE_STRING);
          $password = filter_var($_POST['password'],FILTER_SANITIZE_STRING);
-         if($login=="admin" && $password=="admin"){   //Sustituir por comprobación en BD
+         if($login=="admin" && $password=="1"){   //Sustituir por comprobación en BD
             // Comienzo sesión y guardo los datos del usuario autenticado
             session_start();
             $_SESSION['login'] = $login;
