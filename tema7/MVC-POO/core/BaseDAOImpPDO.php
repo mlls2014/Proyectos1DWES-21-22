@@ -26,8 +26,8 @@ abstract class BaseDAOImpPDO
     * y lo tendría que hacer en cada XXXDAOImp.
     * Otra alternativa sería trabajar en las respuestas de BD sólo con arrays de stdClass, lo que no independiza tampoco la BD
     * de las capas superiores de la app
-   */
-   protected $clase; 
+    */
+   protected $clase;
    protected $db;
 
    /**
@@ -48,7 +48,7 @@ abstract class BaseDAOImpPDO
     */
    public function getAll(): array
    {
-      $return = ["correcto" => false, "datos" => NULL, "error" => NULL];
+      $return = ["correcto" => false, "datos" => [], "error" => NULL];
       try {
          $query = $this->db->query("SELECT * FROM $this->table ORDER BY id DESC");
          //Devolvemos el resultset en forma de array de objetos
@@ -58,64 +58,107 @@ abstract class BaseDAOImpPDO
          $return["datos"] = $resultSet;
       } catch (\PDOException $e) {
          $return["correcto"] = false;
-         $return["error"] = "Error al obtener todas las filas en " . $this->table . "!: " . $e->getMessage() . "</br>";
+         $return["error"] = "Error al obtener todas las filas en " . $this->table . "!: " . $e->getMessage();
       } finally {
          return $return;
       }
    }
 
+   /**
+    * Método genérico para obtener un registro por id en la tabla $table
+    * Devuelve un array asociativo con tres campos:
+    * -'correcto': indica si el listado se realizó correctamente o no.
+    * -'datos': el registro con el id especificado si lo hubiera, null en caso contrario
+    * -'error': almacena el mensaje asociado a una situación errónea (excepción) 
+    *
+    */
    public function getById($id)
    {
+      $return = ["correcto" => false, "datos" => NULL, "error" => NULL];
       try {
          $query = $this->db->query("SELECT * FROM $this->table WHERE id = $id");
          $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->clase);
 
          if ($row = $query->fetch()) {
-            $resultSet = $row;
+            $return["datos"] = $row;
          }
-
-         return $resultSet;
+         $return["correcto"] = true;
       } catch (\PDOException $e) {
-         echo "Error al obtener por id en " . $this->table . "!: " . $e->getMessage() . "</br>";
+         $return["correcto"] = false;
+         $return["error"] = "Error al obtener todas la fila con id $id en "  . $this->table . "!: " . $e->getMessage();
+      } finally {
+         return $return;
       }
    }
 
+   /**
+    * Método genérico para obtener los registros de la tabla $table que cumplan la condicion de que column sea igual a value
+    * Devuelve un array asociativo con tres campos:
+    * -'correcto': indica si el listado se realizó correctamente o no.
+    * -'datos': almacena todos los datos obtenidos de la consulta.
+    * -'error': almacena el mensaje asociado a una situación errónea (excepción) 
+    *
+    */
    public function getBy($column, $value): array
    {
-      $resultSet = [];
+      $return = ["correcto" => false, "datos" => [], "error" => NULL];
       try {
          $query = $this->db->query("SELECT * FROM $this->table WHERE $column = '$value'");
          //Devolvemos el resultset en forma de array de objetos
          $resultSet = $query->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->clase);
-
-         return $resultSet;
+         $return["correcto"] = true;
+         $return["datos"] = $resultSet;
       } catch (\PDOException $e) {
-         echo "Error al obtener por columna en " . $this->table . "!: " . $e->getMessage() . "</br>";
+         $return["correcto"] = false;
+         $return["error"] = "Error al obtener las filas por columnas en " . $this->table . "!: " . $e->getMessage();
       } finally {
-         return $resultSet;
+         return $return;
       }
    }
 
+   /**
+    * Método genérico para borrar un registro por id en la tabla $table
+    * Devuelve un array asociativo con tres campos:
+    * -'correcto': indica si el listado se realizó correctamente o no.
+    * -'datos': número de filas eliminadas?
+    * -'error': almacena el mensaje asociado a una situación errónea (excepción) 
+    *
+    */
    public function deleteById($id)
    {
+      $return = ["correcto" => false, "datos" => null, "error" => NULL];
       try {
          $query = $this->db->query("DELETE FROM $this->table WHERE id = $id");
-         // $query = $this->db->query("UPDATE $this->table SET deleted_at = NOW() WHERE id = $id");
-         return $query;
+         $return["correcto"] = true;
+         $return["datos"] = $query;
       } catch (\PDOException $e) {
-         echo "Error al borrar por id en " . $this->table . "!: " . $e->getMessage() . "</br>";
+         $return["correcto"] = false;
+         $return["error"] = "Error al borrar la fila por id en " . $this->table . "!: " . $e->getMessage();
+      } finally {
+         return $return;
       }
    }
 
+   /**
+    * Método genérico para borrar registros por columnas en la tabla $table
+    * Devuelve un array asociativo con tres campos:
+    * -'correcto': indica si el listado se realizó correctamente o no.
+    * -'datos': número de filas eliminadas?
+    * -'error': almacena el mensaje asociado a una situación errónea (excepción) 
+    *
+    */
    public function deleteBy($column, $value)
    {
+      $return = ["correcto" => false, "datos" => null, "error" => NULL];
       try {
          $query = $this->db->query("DELETE FROM $this->table WHERE $column = '$value'");
-         // $query = $this->db->query("UPDATE $this->table SET deleted_at = NOW() WHERE id = $id");
-         return $query;
+         $return["correcto"] = true;
+         $return["datos"] = $query;
       } catch (\PDOException $e) {
-         echo "Error al borrar por columna en " . $this->table . "!: " . $e->getMessage() . "</br>";
+         $return["correcto"] = false;
+         $return["error"] = "Error al borrar las filas por columna en " . $this->table . "!: " . $e->getMessage();
+      } finally {
+         return $return;
       }
    }
-
 }

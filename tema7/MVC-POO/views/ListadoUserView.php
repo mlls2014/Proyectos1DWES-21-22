@@ -28,16 +28,16 @@
                <td><?= $user->getNombre() ?></td>
                <td><?= $user->getEmail() ?></td>
                <?php if ($user->getImage() !== NULL) : ?>
-                  <td><img src="fotos/<?= $user->getImage() ?>" width="40" /></td>
+                  <td><img src="<?= PHOTOS_FOLDER . $user->getImage() ?>" width="40" /></td>
                <?php else : ?>
                   <td>----</td>
                <?php endif; ?>
                <!-- Enviamos a actuser.php, mediante GET, el id del registro que deseamos editar o eliminar: -->
                <td><a href="?controller=user&action=actuser&id=<?= $user->getId() ?>">Editar </a><a href="?controller=user&action=deluser&id=<?= $user->getId() ?>">Eliminar</a></td>
             </tr>
-         <?php endforeach; ?>
+         <?php endforeach; ?>      
       </table>
-
+      <h5 class="text-center text-uppercase text-secondary mb-2"><a class="btn btn-secondary" href="?controller=user&action=actuser">Añadir Usuario</a></h5>
    </div>
 </section>
 

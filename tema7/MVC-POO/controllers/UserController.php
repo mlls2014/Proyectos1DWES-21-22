@@ -42,7 +42,7 @@ class UserController extends BaseController
    {
       // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
       $parametros = [
-         "datos" => NULL,
+         "datos" => [],
          "mensajes" => []
       ];
       // Realizamos la consulta y almacenamos los resultados en la variable $resultModelo
