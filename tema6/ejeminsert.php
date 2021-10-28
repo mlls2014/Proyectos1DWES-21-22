@@ -10,7 +10,8 @@ try {
 
 // Preparar la consulta
 //Notar la sensibilidad a mayúsculas/minúsculas en el nombre de tabla (en linux).
-$stmt = $db->prepare("INSERT INTO clientes (nombre, ciudad, contacto) VALUES (:nombre, :ciudad, :contacto)");
+$stmt = $db->prepare("INSERT INTO clientes (nombre, ciudad, contacto) 
+   VALUES (:nombre, :ciudad, :contacto)");
 $stmt->bindParam(':nombre', $nombre); // Asociar parámetros
 $stmt->bindParam(':ciudad', $ciudad);
 $stmt->bindParam(':contacto', $contacto);
