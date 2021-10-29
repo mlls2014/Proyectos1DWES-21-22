@@ -4,7 +4,7 @@
 <section class="page-section pt-5">
    <div class="container">
       <h2 class="text-center text-uppercase text-secondary mb-2">Listado de Usuarios</h2>
-      <!--Mostramos los mensajes que se hayan generado al realizar el listado-->
+      <!--Mostramos los mensajes que necesito mostrar antes del listado-->
       <?php foreach ($mensajes as $mensaje) : ?>
          <div class="alert alert-<?= $mensaje["tipo"] ?> alert-dismissible fade show" role="alert">
             <?= $mensaje["mensaje"] ?>
@@ -27,8 +27,8 @@
             <tr>
                <td><?= $user->getNombre() ?></td>
                <td><?= $user->getEmail() ?></td>
-               <?php if ($user->getImage() !== NULL) : ?>
-                  <td><img src="<?= PHOTOS_FOLDER . $user->getImage() ?>" width="40" /></td>
+               <?php if ($user->getImagen() !== NULL) : ?>
+                  <td><img src="<?= PHOTOS_FOLDER . $user->getImagen() ?>" width="40" /></td>
                <?php else : ?>
                   <td>----</td>
                <?php endif; ?>
@@ -37,7 +37,7 @@
             </tr>
          <?php endforeach; ?>      
       </table>
-      <h5 class="text-center text-uppercase text-secondary mb-2"><a class="btn btn-secondary" href="?controller=user&action=actuser">Añadir Usuario</a></h5>
+      <h5 class="text-center text-uppercase text-secondary mb-2"><a class="btn btn-secondary" href="?controller=user&action=createUser">Añadir Usuario</a></h5>
    </div>
 </section>
 

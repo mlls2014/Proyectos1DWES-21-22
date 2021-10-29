@@ -11,14 +11,14 @@ class User
    private $nombre;
    private $email;
    private $password;
-   private $image;
+   private $imagen;
 
-   public function __construct($nombre = "", $email = "", $password = "", $image = "")
+   public function __construct($nombre = "", $email = "", $password = "", $imagen = "")
    {
       $this->nombre = $nombre;
       $this->email = $email;
       $this->password = $password;
-      $this->image = $image;
+      $this->imagen = $imagen;
    }
 
    public function getId()
@@ -61,14 +61,14 @@ class User
       $this->password = $password;
    }
 
-   public function getImage()
+   public function getImagen()
    {
-      return $this->image;
+      return $this->imagen;
    }
 
-   public function setImage($image)
+   public function setImagen($imagen)
    {
-      $this->image = $image;
+      $this->imagen = $imagen;
    }
 
    public function __toString()
