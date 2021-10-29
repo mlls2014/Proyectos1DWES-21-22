@@ -1,7 +1,7 @@
 <?php
   // Conexión a la base de datos usando PDO
   $dbHost = 'localhost';
-  $dbName = 'bdusuarios';
+  $dbName = 'pruebadao';
   $dbUser = 'root';
   $dbPass= '';
 

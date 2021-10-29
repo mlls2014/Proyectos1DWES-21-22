@@ -1,6 +1,6 @@
 <?php
 $host = "localhost";
-$db = "pruebadao";
+$db = "tema6";
 $usuario = "root";
 $password = "";
 try {
@@ -12,7 +12,7 @@ try {
    $resultado->execute();
    // Recuperamos el valor del parámetro de salida
    $resultado->closeCursor(); //Permite limpiar y ejecutar la segunda query
-   $result= $conex->query('SELECT @total AS total');
+   $result= $conex->query('SELECT @total');
    $total= $result->fetchColumn();
    echo "Número total de personas=" .  $total;
 } catch (PDOException $e) {

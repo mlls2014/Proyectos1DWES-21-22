@@ -1,15 +1,15 @@
 <?php
 $host = "localhost";
-$db = "pruebadao";
+$db = "tema6";
 $usuario = "root";
 $password = "";
 try {
    $conex = new PDO("mysql:host=$host;dbname=$db", $usuario, $password);
    $conex->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   $sql = 'CALL seleccionar_persona(:id)'; // Utilizando consultas preparadas
+   $sql = 'CALL listar_clientes(:id)'; // Utilizando consultas preparadas
    $resultado = $conex->prepare($sql);
-   $idsel = 12;
-   $resultado->bindparam(':id',$idsel,PDO::PARAM_INT);
+   $idsel = 'PEPE';
+   $resultado->bindparam(':id',$idsel, PDO::PARAM_STR);
    $resultado->execute(); // Utilizando directamente query()
    $resultado->setFetchMode(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
