@@ -33,12 +33,46 @@
                   <td>----</td>
                <?php endif; ?>
                <!-- Enviamos a actuser.php, mediante GET, el id del registro que deseamos editar o eliminar: -->
-               <td><a href="?controller=user&action=actuser&id=<?= $user->getId() ?>">Editar </a><a href="?controller=user&action=deluser&id=<?= $user->getId() ?>">Eliminar</a></td>
+               <td><a href="?controller=user&action=editUser&id=<?= $user->getId() ?>"><i class="far fa-edit"></i></a>
+                  <a data-bs-toggle='modal' data-bs-target='#deleteModal' data-bs-id='<?= $user->getId() ?>' href="?controller=user&action=deleteUser&id="><i class="far fa-trash-alt"></i></a>
+               </td>
             </tr>
-         <?php endforeach; ?>      
+         <?php endforeach; ?>
       </table>
       <h5 class="text-center text-uppercase text-secondary mb-2"><a class="btn btn-secondary" href="?controller=user&action=createUser">Añadir Usuario</a></h5>
    </div>
+
 </section>
+
+<!-- Modal para confirmar la eliminación de un usuario-->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Confirmación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            ¿Está seguro de que desea eliminar el elemento seleccionado?
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <a id="deleteLink" data-bs-href="?controller=user&action=deleteUser&id=" class="btn btn-danger" href="">Sí</a>
+         </div>
+      </div>
+   </div>
+</div>
+
+<script>
+   var deleteModal = document.getElementById('deleteModal')
+   deleteModal.addEventListener('show.bs.modal', function(event) {
+      var link = event.relatedTarget  // Obtenemos el enlace que lanzó el modal
+      var id = link.getAttribute('data-bs-id') // Del enlace tomamos el atributo data-bs-id que contendrá el id del usuario que queremos borrar
+      var deleteLink = deleteModal.querySelector('#deleteLink') // Obtenemos el botón "Sí" del modal de confirmación
+      href = deleteLink.getAttribute("data-bs-href");  // Tomamos el atributo data-bs-href que contiene la plantilla del enlace de borrado. Es necesario para que a href no se le vayan concatenando id en cada intento de borrado
+      deleteLink.setAttribute("href", href + id); // Para el botón "Sí", completamos el href con la id del usuario a eliminar
+
+   })
+</script>
 
 <?php require 'includes/footer.php'; ?>

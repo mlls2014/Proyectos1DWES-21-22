@@ -50,7 +50,7 @@ abstract class BaseDAOImpPDO
    {
       $return = ["correcto" => false, "datos" => [], "error" => NULL];
       try {
-         $query = $this->db->query("SELECT * FROM $this->table ORDER BY id DESC");
+         $query = $this->db->query("SELECT * FROM $this->table");
          //Devolvemos el resultset en forma de array de objetos
          //PDO::FETCH_PROPS_LATE sirve para que se llame al constructor de la clase antes de asignar los valores de la fila al objeto
          $resultSet = $query->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->clase);

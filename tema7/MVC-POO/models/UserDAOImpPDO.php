@@ -60,6 +60,7 @@ class UserDAOImpPDO extends BaseDAOImpPDO implements UserDAO
          try {
             $stmt = $this->db->prepare($sql);
             $stmt->execute(array($user->getNombre(), $user->getEmail(), $user->getPassword(), $user->getImagen(), $user->getId()));
+            $return["correcto"] = true;
          } catch (\PDOException $e) {
             $return["correcto"] = false;
             $return["error"] = "Error al modificar Usuario!: " . $this->table . "!: " . $e->getMessage();

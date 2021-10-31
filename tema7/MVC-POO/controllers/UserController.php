@@ -54,10 +54,15 @@ class UserController extends BaseController
       // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
       if ($resultModelo["correcto"]) :
          $parametros["datos"] = $resultModelo["datos"];
-         if (isset($_GET["altaok"])) {
+         if (isset($_GET["storeOk"])) {
             $this->mensajes[] = [
                "tipo" => "success",
-               "mensaje" => "El usuario se dio de alta correctamente"
+               "mensaje" => "El usuario se creó correctamente"
+            ];
+         } else if (isset($_GET["updateOk"])) {
+            $this->mensajes[] = [
+               "tipo" => "success",
+               "mensaje" => "El usuario se modificó correctamente"
             ];
          } else {
             //Definimos el mensaje para el alert de la vista de que todo fue correctamente
@@ -86,14 +91,11 @@ class UserController extends BaseController
    public function createUser()
    {
       $parametros = [
-         "datos" => [
-            "nombre" => "",
-            "email" => "",
-            "imagen" => ""
-         ],
+         "accion" => "Alta de usuario",
+         "user" => new User(),
          "mensajes" => []
       ];
-      $this->view->show("AddUser", $parametros);
+      $this->view->show("AltaEdicionUser", $parametros);
    }
 
    /**
@@ -101,90 +103,110 @@ class UserController extends BaseController
     */
    public function storeUser()
    {
-      // Array asociativo que almacenará los mensajes de error que se generen por cada campo
-      $errores = array();
       // Si se ha pulsado el botón guardar...
       if (isset($_POST['submit'])) { // y hemos recibido las variables del formulario
-         //Saneamos y validamos la información del formulario
-         $nombre = filter_var($_POST['nombre'], FILTER_SANITIZE_STRING);
-         $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
-         $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
+         //Saneamos y validamos la información del formulario 
+         $user = $this->tratarFormUser();
 
-         if (strlen($nombre) < 5) {
-            $this->mensajes["nombre"] = [
-               "tipo" => "danger",
-               "mensaje" => "Error: El nombre debe tener al menos 5 caracteres de longitud"
-            ];
-         }
-         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->mensajes["email"] = [
-               "tipo" => "danger",
-               "mensaje" => "Error: El email no es válido"
-            ];
-         }
-         if (empty($password) || !(preg_match("/^(?=.{3,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/", $password))) {
-            $this->mensajes["password"] = [
-               "tipo" => "danger",
-               "mensaje" => "La contraseña no es válida: Debe tener una longitud mínima de 3 caracteres y contener letras mayúsculas, minúsculas y números"
-            ];
-         }
-         /* Realizamos la carga de la imagen en el servidor */
-         $imagen = NULL;
-         if (isset($_FILES["imagen"]) && (!empty($_FILES["imagen"]["tmp_name"]))) {
-            if (!is_dir(PHOTOS_FOLDER)) {
-               $dir = mkdir(PHOTOS_FOLDER, 0777, true);
-            } else {
-               $dir = true;
-            }
-            // Ya verificado que la carpeta uploads existe movemos el fichero seleccionado a dicha carpeta
-            if ($dir) {
-               //Para asegurarnos que el nombre va a ser único...
-               $imagen = time() . "-" . $_FILES["imagen"]["name"];
-               // Movemos el fichero de la carpeta temportal a la nuestra
-               $movfichimg = move_uploaded_file($_FILES["imagen"]["tmp_name"], PHOTOS_FOLDER . $imagen);
-               // Verficamos que la carga se ha realizado correctamente
-               if (!$movfichimg) {
-                  $this->mensajes["imagen"] = [
-                     "tipo" => "danger",
-                     "mensaje" => "Error: La imagen no se cargó correctamente! :("
-                  ];
-               }
-            }
-         }
          // Si no se han producido errores realizamos el alta del usuario
          if (count($this->mensajes) == 0) {
-            $user = new User();
-            $user->setNombre($nombre);
-            $user->setEmail($email);
-            $user->setImagen($imagen);
-            $user->setPassword($password); // sha1($password);
+            // $user->setPassword(sha1($user->getPassword())); 
             $resultModelo = $this->daoUser->save($user);
             if ($resultModelo["correcto"]) :
-               $this->mensajes["altaok"] = [
+               $this->mensajes["storeOk"] = [
                   "tipo" => "success",
-                  "mensaje" => "El usuario se registró correctamente!! :)"
+                  "mensaje" => "El usuario creado correctamente!! :)"
                ];
             else :
                $this->mensajes[] = [
                   "tipo" => "danger",
-                  "mensaje" => "El usuario no pudo registrarse!! :( <br />({$resultModelo["error"]})"
+                  "mensaje" => "El usuario no pudo crearse!! :( <br />({$resultModelo["error"]})"
                ];
+               $user->setPassword(""); // No quiero que el formulario recuerde la contraseña
             endif;
          }
       }
 
-      if (array_key_exists("altaok", $this->mensajes)) { //Vamos a la vista de listado de usuarios
-         $this->redirect("User", "listado", ["altaok" => "1"]);
+      if (array_key_exists("storeOk", $this->mensajes)) { //Vamos a la vista de listado de usuarios
+         $this->redirect("User", "listado", ["storeOk" => "1"]);  // Si muestro el listado de esta forma hay redirección en la url
+         // $this->listado();  // Si muestro el listado de esta forma la url no cambia, sigue en store
       } else { //Volvemos a la vista asociada al alta de usuarios
          $parametros = [
-            "datos" => [
-               "nombre" => $nombre,
-               "email" => $email,
-               "imagen" => $imagen
-            ],
+            "accion" => "Alta de usuario",
+            "user" => $user,
             "mensajes" => $this->mensajes
          ];
-         $this->view->show("AddUser", $parametros);
+         $this->view->show("AltaEdicionUser", $parametros);
+      }
+   }
+
+   /**
+    * Método de la clase controlador que muestra la vista de modificación de un usuario con id 
+    */
+   public function editUser()
+   {
+      if (isset($_GET['id']) && (is_numeric($_GET['id']))) {
+         $id = $_GET['id'];
+         //Realizamos la operación de suprimir el usuario con el id=$id
+         $resultModelo = $this->daoUser->getById($id);
+         if ($resultModelo["correcto"] &&  $resultModelo["datos"] != null) :
+            $user = $resultModelo["datos"];
+            $parametros = [
+               "accion" => "Editar usuario",
+               "user" => $user,
+               "mensajes" => []
+            ];
+            $this->view->show("AltaEdicionUser", $parametros);
+         else :
+            $this->mensajes[] = [
+               "tipo" => "danger",
+               "mensaje" => "No se pudieron obtener los datos de usuario!! :("
+            ];
+            //Realizamos el listado de los usuarios
+            $this->listado();
+         endif;
+      }
+   }
+
+   /**
+    * Método de la clase controlador que responde al POST de la modificación de un usuario
+    */
+   public function updateUser()
+   {
+      // Si se ha pulsado el botón guardar...
+      if (isset($_POST['submit'])) { // y hemos recibido las variables del formulario
+         //Saneamos y validamos la información del formulario 
+         $user = $this->tratarFormUser();
+
+         // Si no se han producido errores realizamos el alta del usuario
+         if (count($this->mensajes) == 0) {
+            // $user->setPassword(sha1($user->getPassword())); 
+            $resultModelo = $this->daoUser->update($user);
+            if ($resultModelo["correcto"]) :
+               $this->mensajes["updateOk"] = [
+                  "tipo" => "success",
+                  "mensaje" => "Usuario modificado correctamente!! :)"
+               ];
+            else :
+               $this->mensajes[] = [
+                  "tipo" => "danger",
+                  "mensaje" => "El usuario no pudo modificarse!! :("
+               ];
+               $user->setPassword(""); // No quiero que el formulario recuerde la contraseña
+            endif;
+         }
+      }
+
+      if (array_key_exists("updateOk", $this->mensajes)) { //Vamos a la vista de listado de usuarios
+         // $this->redirect("User", "listado", ["updateOk" => "1"]);  // Si muestro el listado de esta forma hay redirección en la url
+         $this->listado();  // Si muestro el listado de esta forma la url no cambia, sigue en update
+      } else { //Volvemos a la vista asociada al alta de usuarios
+         $parametros = [
+            "accion" => "Editar usuario",
+            "user" => $user,
+            "mensajes" => $this->mensajes
+         ];
+         $this->view->show("AltaEdicionUser", $parametros);
       }
    }
 
@@ -192,19 +214,18 @@ class UserController extends BaseController
     * Método de la clase controlador que realiza la eliminación de un usuario a 
     * través del campo id
     */
-   public function deluser()
+   public function deleteUser()
    {
       // verificamos que hemos recibido los parámetros desde la vista de listado 
       if (isset($_GET['id']) && (is_numeric($_GET['id']))) {
          $id = $_GET["id"];
          //Realizamos la operación de suprimir el usuario con el id=$id
-         $resultModelo = $this->modelo->deluser($id);
-         //Analizamos el valor devuelto por el modelo para definir el mensaje a 
-         //mostrar en la vista listado
+         $resultModelo = $this->daoUser->deleteById($id);
+         //Analizamos el valor devuelto por el modelo para definir el mensaje a mostrar en la vista listado
          if ($resultModelo["correcto"]) :
             $this->mensajes[] = [
                "tipo" => "success",
-               "mensaje" => "Se eliminó correctamente el usuario $id"
+               "mensaje" => "Se eliminó correctamente el usuario de id $id"
             ];
          else :
             $this->mensajes[] = [
@@ -222,133 +243,58 @@ class UserController extends BaseController
       $this->listado();
    }
 
-
-
-   /**
-    * Método de la clase controlador que permite actualizar los datos del usuario
-    * cuyo id coincide con el que se pasa como parámetro desde la vista de listado
-    * a través de GET
-    */
-   public function actuser()
+   /*
+   * Función que valida el formulario de usuario, carga la imagen en el servidor si los datos son correctos y devuelve un
+   * objeto de tipo User con los datos introducidos en el formulario (sólo saneados pero con posibles errores de valiación)
+   */
+   private function tratarFormUser()
    {
-      // Array asociativo que almacenará los mensajes de error que se generen por cada campo
-      $errores = array();
-      // Inicializamos valores de los campos de texto
-      $valnombre = "";
-      $valemail = "";
-      $valimagen = "";
+      $nombre = filter_var($_POST['nombre'], FILTER_SANITIZE_STRING);
+      $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
+      $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
+      $id = filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT);
+      $user = new User();
+      $user->setNombre($nombre);
+      $user->setEmail($email);
+      $user->setPassword($password);
+      $user->setId($id);
 
-      // Si se ha pulsado el botón actualizar...
-      if (isset($_POST['submit'])) { //Realizamos la actualización con los datos existentes en los campos
-         $id = $_POST['id']; //Lo recibimos por el campo oculto
-         $nuevonombre = $_POST['txtnombre'];
-         $nuevoemail  = $_POST['txtemail'];
-         $nuevaimagen = "";
-
-         // Definimos la variable $imagen que almacenará el nombre de imagen 
-         // que almacenará la Base de Datos inicializada a NULL
-         $imagen = NULL;
-
+      if (strlen($nombre) < 5) {
+         $this->mensajes["nombre"] = [
+            "tipo" => "danger",
+            "mensaje" => "Error: El nombre debe tener al menos 5 caracteres de longitud"
+         ];
+      }
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+         $this->mensajes["email"] = [
+            "tipo" => "danger",
+            "mensaje" => "Error: El email no es válido"
+         ];
+      }
+      if (empty($password) || !(preg_match("/^(?=.{3,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/", $password))) {
+         $this->mensajes["password"] = [
+            "tipo" => "danger",
+            "mensaje" => "La contraseña no es válida: Debe tener una longitud mínima de 3 caracteres y contener letras mayúsculas, minúsculas y números"
+         ];
+      }
+      $imagen = NULL;
+      // Si no se han producido errores realizamos la carga de la imagen en el servidor
+      if (count($this->mensajes) == 0) {
          if (isset($_FILES["imagen"]) && (!empty($_FILES["imagen"]["tmp_name"]))) {
-            // Verificamos la carga de la imagen
-            // Comprobamos si existe el directorio fotos, y si no, lo creamos
-            if (!is_dir("fotos")) {
-               $dir = mkdir("fotos", 0777, true);
-            } else {
-               $dir = true;
-            }
-            // Ya verificado que la carpeta fotos existe movemos el fichero seleccionado a dicha carpeta
-            if ($dir) {
-               //Para asegurarnos que el nombre va a ser único...
-               $nombrefichimg = time() . "-" . $_FILES["imagen"]["name"];
-               // Movemos el fichero de la carpeta temportal a la nuestra
-               $movfichimg = move_uploaded_file($_FILES["imagen"]["tmp_name"], "fotos/" . $nombrefichimg);
-               $imagen = $nombrefichimg;
-               // Verficamos que la carga se ha realizado correctamente
-               if ($movfichimg) {
-                  $imagencargada = true;
-               } else {
-                  //Si no pudo moverse a la carpeta destino generamos un mensaje que se le
-                  //mostrará al usuario en la vista actuser
-                  $imagencargada = false;
-                  $errores["imagen"] = "Error: La imagen no se cargó correctamente! :(";
-                  $this->mensajes[] = [
-                     "tipo" => "danger",
-                     "mensaje" => "Error: La imagen no se cargó correctamente! :("
-                  ];
-               }
-            }
-         }
-         $nuevaimagen = $imagen;
-
-         if (count($errores) == 0) {
-            //Ejecutamos la instrucción de actualización a la que le pasamos los valores
-            $resultModelo = $this->modelo->actuser([
-               'id' => $id,
-               'nombre' => $nuevonombre,
-               'email' => $nuevoemail,
-               'imagen' => $nuevaimagen
-            ]);
-            //Analizamos cómo finalizó la operación de registro y generamos un mensaje
-            //indicativo del estado correspondiente
-            if ($resultModelo["correcto"]) :
-               $this->mensajes[] = [
-                  "tipo" => "success",
-                  "mensaje" => "El usuario se actualizó correctamente!! :)"
-               ];
-            else :
-               $this->mensajes[] = [
+            //Para asegurarnos que el nombre va a ser único...
+            $imagen = time() . "-" . $_FILES["imagen"]["name"];
+            // Movemos el fichero de la carpeta temportal a la nuestra
+            $movfichimg = move_uploaded_file($_FILES["imagen"]["tmp_name"], PHOTOS_FOLDER . $imagen);
+            // Verficamos que la carga se ha realizado correctamente
+            if (!$movfichimg) {
+               $this->mensajes["imagen"] = [
                   "tipo" => "danger",
-                  "mensaje" => "El usuario no pudo actualizarse!! :( <br/>({$resultModelo["error"]})"
+                  "mensaje" => "Error: La imagen no se cargó correctamente! :("
                ];
-            endif;
-         } else {
-            $this->mensajes[] = [
-               "tipo" => "danger",
-               "mensaje" => "Datos de registro de usuario erróneos!! :("
-            ];
-         }
-
-         // Obtenemos los valores para mostrarlos en los campos del formulario
-         $valnombre = $nuevonombre;
-         $valemail  = $nuevoemail;
-         $valimagen = $nuevaimagen;
-      } else { //Estamos rellenando los campos con los valores recibidos del listado
-         if (isset($_GET['id']) && (is_numeric($_GET['id']))) {
-            $id = $_GET['id'];
-            //Ejecutamos la consulta para obtener los datos del usuario #id
-            $resultModelo = $this->modelo->listausuario($id);
-            //Analizamos si la consulta se realiz´correctamente o no y generamos un
-            //mensaje indicativo
-            if ($resultModelo["correcto"]) :
-               $this->mensajes[] = [
-                  "tipo" => "success",
-                  "mensaje" => "Los datos del usuario se obtuvieron correctamente!! :)"
-               ];
-               $valnombre = $resultModelo["datos"]["nombre"];
-               $valemail  = $resultModelo["datos"]["email"];
-               $valimagen = $resultModelo["datos"]["imagen"];
-            else :
-               $this->mensajes[] = [
-                  "tipo" => "danger",
-                  "mensaje" => "No se pudieron obtener los datos de usuario!! :( <br/>({$resultModelo["error"]})"
-               ];
-            endif;
+            }
          }
       }
-      //Preparamos un array con todos los valores que tendremos que rellenar en
-      //la vista adduser: título de la página y campos del formulario
-      $parametros = [
-         "tituloventana" => "Base de Datos con PHP y PDO",
-         "datos" => [
-            "txtnombre" => $valnombre,
-            "txtemail"  => $valemail,
-            "imagen"    => $valimagen
-         ],
-         "mensajes" => $this->mensajes,
-         "id" => $id
-      ];
-      //Mostramos la vista actuser
-      $this->view->show("ActUser", $parametros);
+      $user->setImagen($imagen);
+      return $user;
    }
 }
