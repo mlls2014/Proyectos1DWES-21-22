@@ -22,10 +22,10 @@ class UserDAOImpPDO extends BaseDAOImpPDO implements UserDAO
 
    public function save(User $user)
    {
-      $sql = "INSERT INTO " . $this->table . " (nombre, email, password, image) VALUES (?, ?, ?, ?)";
+      $sql = "INSERT INTO " . $this->table . " (nombre, email, password, imagen) VALUES (?, ?, ?, ?)";
       try {
          $stmt = $this->db->prepare($sql);
-         $stmt->execute(array($user->getNombre(), $user->getEmail(), $user->getPassword(), $user->getImage()));
+         $stmt->execute(array($user->getNombre(), $user->getEmail(), $user->getPassword(), $user->getImagen()));
          $user->setId($this->db->lastInsertId());
       } catch (\PDOException $e) {
          echo "Error al grabar Usuario!: " . $e->getMessage() . "</br>";
@@ -35,10 +35,10 @@ class UserDAOImpPDO extends BaseDAOImpPDO implements UserDAO
    public function update(User $user)
    {
       if (!empty($user->getId())){
-         $sql = "UPDATE " . $this->table . " SET nombre = ?, email = ?, password = ?, image = ? WHERE id = ?";
+         $sql = "UPDATE " . $this->table . " SET nombre = ?, email = ?, password = ?, imagen = ? WHERE id = ?";
          try {
             $stmt = $this->db->prepare($sql);
-            $stmt->execute(array($user->getNombre(), $user->getEmail(), $user->getPassword(), $user->getImage(), $user->getId()));
+            $stmt->execute(array($user->getNombre(), $user->getEmail(), $user->getPassword(), $user->getImagen(), $user->getId()));
          } catch (\PDOException $e) {
             echo "Error al modificar Usuario!: " . $e->getMessage() . "</br>";
          }

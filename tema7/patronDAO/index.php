@@ -17,7 +17,7 @@ abstract class Index{
       $user = new User("David","david@gmail.com", "sds2rd", "mifoto");
       $userDAO->save($user);
       $user = new User("Luis","luis@gmail.com", "sdffesd", "mifoto");
-      $userDAO->save($user);;
+      $userDAO->save($user);
 
       $usuarios = $userDAO->getAll();
       foreach ($usuarios as $user) {

@@ -17,9 +17,9 @@ class User extends Model
    private $nombre;
    private $email;
    private $password;
-   private $image;
+   private $imagen;
 
-   public function __construct($nombre = "", $email = "", $password = "", $image = "")
+   public function __construct($nombre = "", $email = "", $password = "", $imagen = "")
    {
       // Se conecta a la BD
       parent::__construct(); 
@@ -28,7 +28,7 @@ class User extends Model
       $this->nombre = $nombre;
       $this->email = $email;
       $this->password = $password;
-      $this->image = $image;
+      $this->imagen = $imagen;
    }
 
    public function getId()
@@ -71,14 +71,14 @@ class User extends Model
       $this->password = $password;
    }
 
-   public function getImage()
+   public function getimagen()
    {
-      return $this->image;
+      return $this->imagen;
    }
 
-   public function setImage($image)
+   public function setimagen($imagen)
    {
-      $this->image = $image;
+      $this->imagen = $imagen;
    }
 
    public function __toString()
@@ -93,10 +93,10 @@ class User extends Model
    */
    public function save()
    {
-      $sql = "INSERT INTO " . $this->table . " (nombre, email, password, image) VALUES (?, ?, ?, ?)";
+      $sql = "INSERT INTO " . $this->table . " (nombre, email, password, imagen) VALUES (?, ?, ?, ?)";
       try {
          $stmt = $this->db->prepare($sql);
-         $stmt->execute(array($this->nombre, $this->email, $this->password, $this->image));
+         $stmt->execute(array($this->nombre, $this->email, $this->password, $this->imagen));
          $this->setId($this->db->lastInsertId());
       } catch (\PDOException $e) {
          echo "Error al grabar Usuario!: " . $e->getMessage() . "</br>";
@@ -109,10 +109,10 @@ class User extends Model
    public function update()
    {
       if (!empty($this->id)){
-         $sql = "UPDATE " . $this->table . " SET nombre = ?, email = ?, password = ?, image = ? WHERE id = ?";
+         $sql = "UPDATE " . $this->table . " SET nombre = ?, email = ?, password = ?, imagen = ? WHERE id = ?";
          try {
             $stmt = $this->db->prepare($sql);
-            $stmt->execute(array($this->nombre, $this->email, $this->password, $this->image, $this->id));
+            $stmt->execute(array($this->nombre, $this->email, $this->password, $this->imagen, $this->id));
          } catch (\PDOException $e) {
             echo "Error al modificar Usuario!: " . $e->getMessage() . "</br>";
          }
