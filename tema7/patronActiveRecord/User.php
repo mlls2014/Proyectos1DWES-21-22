@@ -120,4 +120,6 @@ class User extends Model
             echo "Error al modificar Usuario!: No existe id</br>";
       }
    }
+
+   
 }

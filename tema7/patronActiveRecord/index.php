@@ -22,11 +22,17 @@ abstract class Index{
          echo $user . "<br>";  
       }
       
+      echo "Borro a los usuarios con el nombre igual a Ana<br>";
+
       //Borro a los usuarios con el nombre igual a Ana
       $user->deleteBy('nombre',"Ana");
+
+      echo "Borro a los usuarios con la password igual a sds2rd<br>";
       //Borro a los usuarios con la password igual a sds2rd
       $user->deleteBy('password', "sds2rd");
+
       //Muestro los usuarios que quedan
+      echo "Muestro los usuarios que quedan<br>";
       $usuarios = $user->getAll();
       foreach ($usuarios as $user) {
          echo $user . "<br>";  
@@ -35,7 +41,7 @@ abstract class Index{
       //Obtengo a todos los usuarios cuyo nombre sea Luis
       $usuarios = $user->getBy('nombre',"Luis");
       foreach ($usuarios as $user) {
-         //Actualizo el nombre de cada uno a Luis
+      
          $user->setNombre('Juan'); 
          $user->update(); 
       }
