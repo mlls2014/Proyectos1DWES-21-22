@@ -25,7 +25,7 @@ class DBManager
     * @var PDO
     */
    private $db;
-   private $creator;  // Instancia al creador de los DAO
+   private $creator;  // Instancia al creador de los DAO. Como PHP no es un lenguaje tipeado el uso de interfaces no es imprescindible
    private function __construct()
    {
    }
@@ -64,7 +64,7 @@ class DBManager
       return $this->db;
    }
 
-   public function getCreator()
+   public function getCreator(): CreatorDAO 
    {
       if (is_null($this->creator)) {
          if (GESTORDB == "MONGO") {
