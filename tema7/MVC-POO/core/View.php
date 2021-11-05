@@ -35,5 +35,6 @@ class View
 /*
 El uso es bastante sencillo:
 $vista = new View();
-$vista->show('listar.php', array("nombre" => "Juan"));
+$vista->show('listar', array("nombre" => "Juan"));
+En la vista yo podré usar la variable $nombre que contendrá Juan
 */

@@ -6,7 +6,12 @@
  */
 class User
 {
-
+   
+   /**
+    * id  campo id del usuario
+    *
+    * @var int
+    */
    private $id;
    private $nombre;
    private $email;
