@@ -198,8 +198,8 @@ class UserController extends BaseController
       }
 
       if (array_key_exists("updateOk", $this->mensajes)) { //Vamos a la vista de listado de usuarios
-         // $this->redirect("User", "listado", ["updateOk" => "1"]);  // Si muestro el listado de esta forma hay redirección en la url
-         $this->listado();  // Si muestro el listado de esta forma la url no cambia, sigue en update
+         $this->redirect("User", "listado", ["updateOk" => "1"]);  // Si muestro el listado de esta forma hay redirección en la url
+         // $this->listado();  // Si muestro el listado de esta forma la url no cambia, sigue en update
       } else { //Volvemos a la vista asociada al alta de usuarios
          $parametros = [
             "accion" => "Editar usuario",

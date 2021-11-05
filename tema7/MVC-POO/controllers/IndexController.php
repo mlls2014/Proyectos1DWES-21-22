@@ -56,16 +56,10 @@ class IndexController extends BaseController
             // Comienzo sesión y guardo los datos del usuario autenticado
             session_start();
             $_SESSION['login'] = $login;
-            $parametros = [
-               "tituloventana" => "Gestión de usuarios",
-               "mensajes" => []
-            ];
             // Salto a la página inicial de mi portal
             $this->redirect("home","index");
-            // $this->view->show("Inicio", $parametros);
          }else { // Autenticación no correcta
             $parametros = [
-               "tituloventana" => "Gestión de usuarios",
                "mensajes" => [[
                               "tipo" => "danger",
                               "mensaje" => "¡El usuario o la contraseña no son correctos!"]

@@ -29,7 +29,10 @@
                <button class="btn btn-primary btn-xl mt-3 mb-2" id="submitButton" name="submit" type="submit">Entrar</button>
             </form>
             <?php foreach ($mensajes as $mensaje) : ?>
-               <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
+               <div class="alert alert-<?= $mensaje["tipo"] ?> alert-dismissible fade show" role="alert">
+                  <?= $mensaje["mensaje"] ?>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+               </div>
             <?php endforeach; ?>
          </div>
       </div>
