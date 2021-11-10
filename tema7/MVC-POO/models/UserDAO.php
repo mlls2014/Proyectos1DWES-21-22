@@ -27,14 +27,14 @@ interface UserDAO extends BaseDAO{
    public function update(User $user);
 
    /**
-    * Devuelve el objeto $user si existe un usuario con el login 
-    * y la contraseña dadas, null en caso contrario
+    * Devuelve el array de objetos con el $user si existe un usuario con el login 
+    * y la contraseña dadas, null en caso contrario.
     *
     * @param string $login
     * @param string $password
-    * @return User
+    * @return Array 
     */
-   // public function validarUsuario(login , password);
+   public function validarUsuario($login , $password);
 
    /* Devuelve el array de objetos Curso a los que está apuntado el $user
    *  Array vacío en c.c.

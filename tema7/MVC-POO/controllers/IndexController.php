@@ -12,9 +12,13 @@ require_once MODELS_FOLDER . 'UserDAOImpPDO.php';
 
 class IndexController extends BaseController
 {
+   // El atributo $dao será a través del que podremos acceder a los datos 
+   private $daoUser;
+
    public function __construct()
    {
       parent::__construct();
+      $this->daoUser = new UserDAOImpPDO();
    }
 
    /**
@@ -49,13 +53,14 @@ class IndexController extends BaseController
     public function autenticate()
     {
       if(isset($_POST['submit'])){
-         // Pulso el botón Entrar del login
+         // Pulso el botón Entrar del login. El login es el nombre
          $login = filter_var($_POST['login'],FILTER_SANITIZE_STRING);
          $password = filter_var($_POST['password'],FILTER_SANITIZE_STRING);
-         if($login=="admin" && $password=="1"){   //Sustituir por comprobación en BD
+         $modelo = $this->daoUser->validarUsuario($login, $password);
+         if($user = $modelo['datos']){
             // Comienzo sesión y guardo los datos del usuario autenticado
             session_start();
-            $_SESSION['login'] = $login;
+            $_SESSION['login'] = $user->getNombre();
             // Salto a la página inicial de mi portal
             $this->redirect("home","index");
          }else { // Autenticación no correcta
@@ -82,6 +87,16 @@ class IndexController extends BaseController
    {
       
    }
+
+   /**
+    * Procesar la vista de registro
+    *
+    * @return void
+    */
+    public function storeRegister()
+    {
+       
+    }
 
    /**
     * Otras acciones que puedan ser necesarias
