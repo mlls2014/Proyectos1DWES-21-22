@@ -9,16 +9,20 @@
  */
 require_once MODELS_FOLDER . 'User.php';
 require_once MODELS_FOLDER . 'UserDAOImpPDO.php';
+require_once MODELS_FOLDER . 'Curso.php';
+require_once MODELS_FOLDER . 'CursoDAOImpPDO.php';
 
 class IndexController extends BaseController
 {
    // El atributo $dao será a través del que podremos acceder a los datos 
    private $daoUser;
+   private $daoCurso;
 
    public function __construct()
    {
       parent::__construct();
       $this->daoUser = new UserDAOImpPDO();
+      $this->daoCurso = new CursoDAOImpPDO();
    }
 
    /**
@@ -99,6 +103,32 @@ class IndexController extends BaseController
     }
 
    /**
-    * Otras acciones que puedan ser necesarias
+    * Solo para proba CursoDAO
     */
+    public function testCursoDAO(){      
+      // $curso = new Curso("PHP", "2021-01-016" );
+      // $this->daoCurso->save($curso);
+      // $curso = new Curso("NodeJS","2022-02-018");
+      // $this->daoCurso->save($curso);
+      
+      $modelo = $this->daoCurso->getAll();
+      if ($modelo['correcto']){
+         echo "<pre>";
+         echo "Cursos en la BD:<br>";
+         foreach ($modelo['datos'] as $curso) {
+            echo "\t" . $curso . "<br>";
+            // También puedo tomar el elemento 'datos' sin chequear correcto
+            $usuarios = ($this->daoCurso->usuarios($curso->getId()))['datos'];
+            echo "\t" . " Usuarios inscritos en el curso<br>";
+            foreach ($usuarios as $user){
+               echo "\t\t" . $user . "<br>";
+            }
+         }
+         echo "</pre>";
+      }else{
+         echo $modelo['error'];
+      }
+      
+    }
+
 }

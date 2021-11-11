@@ -1,5 +1,5 @@
 <?php
-require_once("User.php");
+require_once MODELS_FOLDER . 'User.php';
 
 /**
  * UserDAO

@@ -5,8 +5,7 @@
 * bastaría con añadir una clase UserDAOImpOracle sin necesidad de cambiar las otras capas de la app
 */
 
-require_once("UserDAO.php");
-// require_once("User.php");
+require_once MODELS_FOLDER . 'UserDAO.php';
 
 class UserDAOImpPDO extends BaseDAOImpPDO implements UserDAO
 {
