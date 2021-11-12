@@ -86,7 +86,7 @@ class CursoDAOImpPDO extends BaseDAOImpPDO implements CursoDAO
     public function usuarios($idCurso){
       // Para este tipo de métodos las propiedades tabla y clase no son suficientes
       // No tengo más remedio que escribir directamente el nombre de las tablas y de las clases
-      $return = ["correcto" => false, "datos" => null, "error" => NULL];
+      $return = ["correcto" => false, "datos" => [], "error" => NULL];
       $sql = "SELECT usuarios.* FROM usuarios JOIN inscripciones " . 
              "WHERE usuarios.id = inscripciones.estudiante_id " .
              "AND inscripciones.curso_id = ? ";

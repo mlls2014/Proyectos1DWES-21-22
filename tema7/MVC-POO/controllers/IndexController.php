@@ -106,9 +106,9 @@ class IndexController extends BaseController
     * Solo para proba CursoDAO
     */
     public function testCursoDAO(){      
-      // $curso = new Curso("PHP", "2021-01-016" );
-      // $this->daoCurso->save($curso);
-      // $curso = new Curso("NodeJS","2022-02-018");
+      $curso = new Curso("SpringBoot", "2021-04-19" );
+      $this->daoCurso->save($curso);
+      // $curso = new Curso("NodeJS","2022-02-18");
       // $this->daoCurso->save($curso);
       
       $modelo = $this->daoCurso->getAll();

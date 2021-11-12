@@ -64,7 +64,9 @@ CREATE TABLE IF NOT EXISTS `inscripciones` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `curso_id` bigint(20) NOT NULL,
   `estudiante_id` bigint(20) NOT NULL,
+  `fecha` date NOT NULL DEFAULT CURDATE(),
   `estado` smallint(6) NOT NULL DEFAULT 0,
+
   PRIMARY KEY (`id`),
   KEY `curso_id` (`curso_id`),
   KEY `estudiante_id` (`estudiante_id`)

@@ -32,7 +32,7 @@ interface CursoDAO extends BaseDAO{
     *
     * @param $idCurso id del curso
     *
-    * @return void
+    * @return array
     */
    public function usuarios($idCurso);
 }
