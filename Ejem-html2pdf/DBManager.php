@@ -40,7 +40,7 @@ class DBManager
    {
       if (is_null($this->db)) {
          try {
-            $this->db = new \PDO("mysql:host=localhost;dbname=bdusuarios", 'admin', 'admin');
+            $this->db = new \PDO("mysql:host=localhost;dbname=pruebadao", 'root', '');
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
          } catch (\PDOException $ex) {
