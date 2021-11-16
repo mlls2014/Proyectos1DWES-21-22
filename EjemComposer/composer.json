@@ -1,6 +1,12 @@
 {
-    "name": "vagrant/ejem-composer",
+    "name": "manuel/ejem-composer",
+    "authors": [
+        {
+            "name": "mlls2014",
+            "email": "manlucsan@gmail.com"
+        }
+    ],
     "require": {
-        "endroid/qr-code": "^3.9"
+        "endroid/qr-code": "^4.4"
     }
 }
