@@ -83,13 +83,14 @@ class CursoDAOImpPDO extends BaseDAOImpPDO implements CursoDAO
     *
     * @return array  Array del tipo return usado en el modelo. datos será un array de User
     */
-    public function usuarios($idCurso){
+   public function usuarios($idCurso)
+   {
       // Para este tipo de métodos las propiedades tabla y clase no son suficientes
       // No tengo más remedio que escribir directamente el nombre de las tablas y de las clases
       $return = ["correcto" => false, "datos" => [], "error" => NULL];
-      $sql = "SELECT usuarios.* FROM usuarios JOIN inscripciones " . 
-             "WHERE usuarios.id = inscripciones.estudiante_id " .
-             "AND inscripciones.curso_id = ? ";
+      $sql = "SELECT usuarios.* FROM usuarios JOIN inscripciones " .
+         "WHERE usuarios.id = inscripciones.estudiante_id " .
+         "AND inscripciones.curso_id = ? ";
       try {
          $stmt = $this->db->prepare($sql);
          $stmt->execute(array($idCurso));
@@ -101,5 +102,52 @@ class CursoDAOImpPDO extends BaseDAOImpPDO implements CursoDAO
       } finally {
          return $return;
       }
-    }
+   }
+
+   /**
+    * Devuelve todos los cursos junto con la propiedad Profesor recuperada de la BD
+    * No podemos usar FETCH_CLASS ya que el select de la tabla no se corresponde con nuestros modelos
+    *
+    * @return array
+    */
+   public function getAllWithProfesor(){
+      $return = ["correcto" => false, "datos" => [], "error" => NULL];
+      try {
+         $query = $this->db->query("SELECT cursos.nombre as nomcurso, cursos.id, cursos.profesor_id, cursos.fecha_inicio, "
+         . " cursos.fecha_fin, cursos.fecha_sol, cursos.duracion, cursos.descripcion, cursos.coste, "
+         . " cursos.participantes, usuarios.nombre as nomusu, usuarios.email, usuarios.password, usuarios.imagen  FROM $this->table "
+         . "LEFT JOIN usuarios ON cursos.profesor_id = usuarios.id");
+         $resultSet = [];
+         while($row = $query->fetch(PDO::FETCH_ASSOC)){
+            $curso = new Curso();
+            $curso->setId($row['id']);
+            $curso->setNombre($row['nomcurso']);
+            $curso->setProfesorId($row['profesor_id']);
+            $curso->setFechaInicio($row['fecha_inicio']);
+            $curso->setFechaFin($row['fecha_fin']);
+            $curso->setFechaSol($row['fecha_sol']);
+            $curso->setDuracion($row['duracion']);
+            $curso->setDescripcion($row['descripcion']);
+            $curso->setCoste($row['coste']);
+            $curso->setParticipantes($row['participantes']);
+            if(!empty($row['profesor_id'])){
+               $profesor = new User();
+               $profesor->setId($row['profesor_id']);
+               $profesor->setNombre($row['nomusu']);
+               $profesor->setEmail($row['email']);
+               $profesor->setPassword($row['password']);
+               $profesor->setImagen($row['imagen']);
+               $curso->setProfesor($profesor);
+            } 
+            $resultSet[]=$curso;  
+         }
+         $return["correcto"] = true;
+         $return["datos"] = $resultSet;
+      } catch (\PDOException $e) {
+         $return["correcto"] = false;
+         $return["error"] = "Error al obtener todas las filas en " . $this->table . "!: " . $e->getMessage();
+      } finally {
+         return $return;
+      }
+   }
 }

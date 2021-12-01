@@ -35,4 +35,14 @@ interface CursoDAO extends BaseDAO{
     * @return array
     */
    public function usuarios($idCurso);
+
+   /**
+    * Devuelve todos los cursos junto con la propiedad Profesor recuperada de la BD
+    *
+    * @param $idCurso id del curso
+    *
+    * @return array
+    */
+   public function getAllWithProfesor();
+
 }

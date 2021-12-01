@@ -42,13 +42,18 @@ class UserController extends BaseController
     */
    public function listado()
    {
+      $regsxpag = (isset($_GET['regsxpag']))? (int)$_GET['regsxpag']:6;
+ //Establecemos la página que vamos a mostrar, por página,por defecto la 1
+ $pagina = (isset($_GET['pagina']))? (int)$_GET['pagina']:1;
+
       // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
       $parametros = [
          "datos" => [],
          "mensajes" => []
       ];
       // Realizamos la consulta y almacenamos los resultados en la variable $resultModelo
-      $resultModelo = $this->daoUser->getAll();
+      // $resultModelo = $this->daoUser->getAll();
+      $resultModelo = $this->daoUser->getPaginate($regsxpag, $pagina);
       // Si la consulta se realizó correctamente transferimos los datos obtenidos
       // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
       // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos

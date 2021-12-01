@@ -21,12 +21,24 @@ class Curso
    private $duracion;
    private $descripcion;
    private $coste;
-   private $participantes;
+   private $participantes;  // Número máximo de participantes en el curso
+   private $profesor;  // Objeto de tipo User correspondiente al profesor que imparte el curso
 
    public function __construct($nombre = "", $fecha_inicio = "2021-11-11")
    {
       $this->nombre = $nombre;
       $this->fecha_inicio = $fecha_inicio;
+      $this->profesor = null;
+   }
+
+   public function getProfesor()
+   {
+      return $this->profesor;
+   }
+
+   public function setProfesor($profesor)
+   {
+      $this->profesor = $profesor;
    }
 
    public function getId()

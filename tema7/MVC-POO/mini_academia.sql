@@ -51,8 +51,9 @@ CREATE TABLE IF NOT EXISTS `cursos` (
 --
 
 INSERT INTO `cursos` (`id`, `nombre`, `profesor_id`, `fecha_inicio`, `fecha_fin`, `fecha_sol`, `duracion`, `descripcion`, `coste`, `participantes`) VALUES
-(1, 'Curso de PHP', NULL, '2021-09-19', '2022-03-23', NULL, NULL, '<h1>Curso de PHP</h1>\r\n', 0, NULL),
-(2, 'NodeJS', NULL, '2022-02-18', NULL, NULL, NULL, '<h1>Curso de NodeJS</h1>\n', NULL, NULL);
+(1, 'Curso de PHP', 1, '2021-09-19', '2022-03-23', NULL, NULL, '<h1>Curso de PHP</h1>\r\n', 0, NULL),
+(2, 'NodeJS', 2, '2022-02-18', NULL, NULL, NULL, '<h1>Curso de NodeJS</h1>\n', NULL, NULL),
+(3, 'SpringBoot', null, '2022-02-18', NULL, NULL, NULL, '<h1>Curso de SpringBoot</h1>\n', NULL, NULL);
 
 -- --------------------------------------------------------
 

@@ -131,4 +131,26 @@ class IndexController extends BaseController
       
     }
 
+    /**
+    * Solo para proba CursoDAO
+    */
+    public function testCursosConProfesor(){      
+      $modelo = $this->daoCurso->getAllWithProfesor();
+   
+      if ($modelo['correcto']){
+         echo "<pre>";
+         echo "Cursos en la BD:<br>";
+         foreach ($modelo['datos'] as $curso) {
+            echo "\t" . $curso->getId() . "<br>";
+            echo "\t" . $curso->getNombre() . "<br>";
+            echo "\t" . $curso->getProfesorId() . "<br>";
+            echo "\t" . $curso->getDuracion() . "<br>";
+            echo "\tProfesor:<br>";
+            echo "\t\t" . $curso->getProfesor() . "<br>";
+         }
+         echo "</pre>";
+      }else{
+         echo $modelo['error'];
+      } 
+    }
 }
