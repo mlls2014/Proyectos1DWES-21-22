@@ -1,5 +1,5 @@
-<?php require 'includes/head.php'; ?>
-<?php require 'includes/navauth.php'; ?>
+<?php require VIEWS_FOLDER . 'includes/head.php'; ?>
+<?php require VIEWS_FOLDER . 'includes/navauth.php'; ?>
 
 <section class="page-section pt-5">
    <div class="container">
