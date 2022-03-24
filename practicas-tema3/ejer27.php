@@ -54,7 +54,7 @@
 
       if (isset($_POST["submit"])) {
          //Sanea los tres lados
-         $numeros = recoge("numeros");
+         $numeros = recoge("numeros",[]);
 
          //Válida los números
          for ($i = 0; $i < count($numeros); $i++) {
