@@ -7,7 +7,7 @@
   </div> -->
   <h1>Login de usuario: MLLS</h1>
   <div class="container">
-    <form action="index.php" method="POST">
+    <form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST">
       <label for="name">Usuario:
         <input type="text" name="usuario" class="form-control" value="<?= $usuario; ?>" />
       </label>
